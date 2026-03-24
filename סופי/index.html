@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="INFAST - שירות מקצועי לאיסוף רשומות רפואיות, תיקי משטרה ומסמכים מהמוסד לביטוח לאומי למשרדי עורכי דין וחברות ביטוח." />
-  <title>INFAST | Legal Records Retrieval & Analysis</title>
+  <title>INFAST | Legal Records Retrieval &amp; Analysis</title>
 
   <!-- Google Fonts: Heebo -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -12,7 +12,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&family=Lora:wght@400;500&display=swap" rel="stylesheet" />
 
   <!-- Phosphor Icons -->
-  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"
+          integrity="sha384-cPFV+/abYd3INVFHPmSKpBmcnH+Q+bTZW7dv/EiuShUNPkHyFmRF8PsL7Ibfvunk"
+          crossorigin="anonymous" defer></script>
 
   <style>
     /* ==================== SKIP LINK ==================== */
@@ -283,6 +285,7 @@
       justify-content: space-between;
       height: 72px;
       gap: 20px;
+      overflow: hidden;
     }
 
     .logo-wrap {
@@ -1372,35 +1375,63 @@
     .accessibility-section {
       background: var(--bg);
       border-top: 1px solid var(--border);
-      padding: 48px 0;
+      padding: 60px 0;
+    }
+
+    .accessibility-inner {
+      max-width: 760px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 44px;
+      box-shadow: var(--shadow-sm);
     }
 
     .accessibility-section h2 {
-      font-family: var(--display-font);
       font-size: 22px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--navy);
       margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--border);
     }
 
     .accessibility-section p {
       font-size: 15px;
       color: var(--text);
-      line-height: 1.7;
+      line-height: 1.75;
       margin-bottom: 12px;
-      max-width: 760px;
     }
 
     .accessibility-section ul {
-      list-style: disc;
-      padding-right: 24px;
+      list-style: none;
       margin-bottom: 16px;
+      padding: 0;
     }
 
     .accessibility-section ul li {
-      font-size: 15px;
-      color: var(--text);
+      font-size: 14px;
+      color: var(--text-muted);
       line-height: 1.8;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .accessibility-section ul li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+
+    .accessibility-section ul li:last-child {
+      border-bottom: none;
     }
 
     .accessibility-section a {
@@ -1408,26 +1439,40 @@
       text-decoration: underline;
     }
 
-    .accessibility-section code {
-      background: rgba(26,38,73,0.07);
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-
     .accessibility-section h3 {
-      font-family: var(--display-font);
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--navy);
       margin-top: 28px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .access-contact-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      font-size: 15px;
+      line-height: 2;
+      margin-top: 8px;
     }
 
     .access-updated {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
       margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 640px) {
+      .accessibility-inner {
+        padding: 28px 20px;
+      }
     }
 
     .footer-contact {
@@ -1630,7 +1675,7 @@
       }
 
       .logo-tagline {
-        font-size: 11px;
+        display: none;
       }
 
       /* On mobile: hide phone number text, show only icon */
@@ -2230,6 +2275,8 @@
           <div class="contact-form-wrap fade-in">
             <h3>שלחו לנו פנייה</h3>
             <form id="contact-form" novalidate aria-label="טופס יצירת קשר">
+              <!-- Honeypot anti-spam field — must stay empty -->
+              <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
 
               <div class="form-grid-2">
                 <div class="form-group" id="fg-name">
@@ -2397,40 +2444,33 @@
   <!-- ==================== ACCESSIBILITY STATEMENT ==================== -->
   <section id="accessibility-statement" aria-labelledby="access-title" class="accessibility-section">
     <div class="container">
+      <div class="accessibility-inner">
 
-      <h2 id="access-title">הצהרת נגישות</h2>
+        <h2 id="access-title">הצהרת נגישות</h2>
 
-      <p>חברת INFAST רואה חשיבות עליונה במתן שירות שוויוני לכלל המשתמשים, לרבות אנשים עם מוגבלויות. האתר תוכנן ופותח תוך מחויבות לנגישות דיגיטלית בהתאם לדרישות <strong>תקן ישראלי 5568</strong> ועקרונות <strong>WCAG 2.1 ברמה AA</strong>, וכן בהתאם להוראות חוק שוויון זכויות לאנשים עם מוגבלות, התשנ"ח–1998.</p>
+        <p>INFAST מחויבת לנגישות דיגיטלית ולמתן שירות שוויוני לכלל המשתמשים, לרבות אנשים עם מוגבלויות. האתר פותח בהתאם לדרישות <strong>תקן ישראלי 5568</strong> ועקרונות <strong>WCAG 2.1 ברמה AA</strong>, בהתאם לחוק שוויון זכויות לאנשים עם מוגבלות, התשנ"ח–1998.</p>
 
-      <h3>מה בוצע באתר</h3>
-      <ul>
-        <li>מבנה סמנטי תקני — שימוש בתגיות <strong>header, main, section, footer</strong> וציוני דרך (landmarks) לניווט מהיר</li>
-        <li>היררכיית כותרות תקינה ורצופה (H1 ← H2 ← H3) ללא דילוג רמות</li>
-        <li>קישור "דלג לתוכן הראשי" בראש הדף לניווט מהיר עבור משתמשי מקלדת וקורא מסך</li>
-        <li>כל שדות הטופס מחוברים לתוויות (<strong>label</strong>) ולהודעות שגיאה בעזרת <strong>aria-describedby</strong></li>
-        <li>ניגודיות צבעים העומדת ביחס מינימלי של 4.5:1 לטקסט רגיל ו-3:1 לטקסט גדול ואייקונים</li>
-        <li>טקסט חלופי (alt) לכל תמונה משמעותית; תמונות דקורטיביות מסומנות <strong>alt=""</strong></li>
-        <li>ניווט מלא במקלדת בלבד, כולל מיקוד ויזואלי ברור על כל אלמנט אינטראקטיבי</li>
-        <li>שפת הדף מוגדרת כעברית (<strong>lang="he" dir="rtl"</strong>) לתמיכה בקוראי מסך</li>
-        <li>הודעות מערכת (הגשת טופס, שגיאות) מוכרזות אוטומטית לקוראי מסך באמצעות <strong>aria-live</strong></li>
-        <li>תפריט ה-tabs של ספקי המידע ממומש עם תפקידי ARIA מלאים (role="tablist/tab/tabpanel")</li>
-      </ul>
+        <h3>מה בוצע לשיפור הנגישות</h3>
+        <ul>
+          <li>מבנה סמנטי תקין עם ציוני דרך (landmarks) לניווט מהיר</li>
+          <li>ניווט מלא במקלדת עם מיקוד ויזואלי ברור על כל אלמנט</li>
+          <li>תמיכה מלאה בקוראי מסך, כולל הכרזות ARIA לטפסים והודעות מערכת</li>
+          <li>ניגודיות צבעים העומדת בדרישות התקן</li>
+          <li>טקסט חלופי לתמונות משמעותיות</li>
+          <li>תמיכה מלאה בכיוון RTL ובשפה העברית</li>
+        </ul>
 
-      <h3>מצב התאימות</h3>
-      <p>רוב דפי האתר עומדים בעקרונות WCAG 2.1 AA. ייתכן שמסמכי PDF מצורפים או תכנים חיצוניים (כגון מפות) אינם עומדים בכל הדרישות. אנו פועלים לשיפור מתמיד.</p>
+        <h3>פניות בנושא נגישות</h3>
+        <p>נתקלתם בבעיה או יש לכם הצעה לשיפור? נשמח לשמוע.</p>
+        <div class="access-contact-box">
+          <strong>רכז הנגישות:</strong> שניר דעבול<br />
+          <strong>טלפון:</strong> <a href="tel:0546326376">054-6326376</a><br />
+          <strong>דוא"ל:</strong> <a href="mailto:office@infast.co.il">office@infast.co.il</a>
+        </div>
 
-      <h3>כיצד לשנות את גודל הגופן</h3>
-      <p>ניתן להגדיל את הטקסט בכל דפדפן מודרני: <strong>Ctrl / Cmd עם +</strong> להגדלה, <strong>Ctrl / Cmd עם −</strong> להקטנה, <strong>Ctrl / Cmd + 0</strong> לאיפוס.</p>
+        <p class="access-updated">הצהרה זו עודכנה: מרץ 2026</p>
 
-      <h3>פניות בנושא נגישות</h3>
-      <p>נתקלתם בבעיה? יש לכם הצעה לשיפור? נשמח לשמוע.</p>
-      <p>
-        <strong>רכז הנגישות:</strong> INFAST<br />
-        <strong>טלפון:</strong> <a href="tel:0546326376">054-6326376</a><br />
-        <strong>דוא"ל:</strong> <a href="mailto:office@infast.co.il">office@infast.co.il</a>
-      </p>
-      <p class="access-updated">הצהרה זו עודכנה לאחרונה: מרץ 2026</p>
-
+      </div>
     </div>
   </section>
 
@@ -2537,6 +2577,9 @@
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+
+        // Honeypot check — bots fill hidden fields
+        if (form.querySelector('[name="_gotcha"]').value !== '') return;
 
         const nameOk = validateField('fname', 'fg-name', (v) => v.length >= 2);
         const phoneOk = validateField('fphone', 'fg-phone', isValidPhone);
