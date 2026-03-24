@@ -1164,6 +1164,10 @@
       color: #aab0c0;
     }
 
+    .form-textarea {
+      resize: vertical;
+    }
+
     select.form-control {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a6380' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
       background-repeat: no-repeat;
@@ -1202,6 +1206,12 @@
       justify-content: center;
       padding: 15px;
       font-size: 16px;
+    }
+
+    .form-success-icon {
+      font-size: 24px;
+      margin-left: 8px;
+      vertical-align: middle;
     }
 
     .form-success {
@@ -1947,7 +1957,7 @@
               <p>טכנולוגיה שתשנה את האופן שבו משרדי עורכי דין עובדים עם חומר רפואי — מעשרות עמודים לתובנה אחת ברורה.</p>
               <ul class="ai-features-list" aria-label="פיצ'רים בפיתוח">
                 <li>
-                  <i class="ph ph-lock-simple ph lock-icon" aria-hidden="true"></i>
+                  <i class="ph ph-lock-simple lock-icon" aria-hidden="true"></i>
                   סיכום אוטומטי של עשרות עמודים לדף אחד
                 </li>
                 <li>
@@ -1966,21 +1976,21 @@
             </div>
             <div class="ai-card-right ai-visual" aria-hidden="true">
               <div class="ai-visual-node">
-                <i class="ph ph-file-text"></i>
+                <i class="ph ph-file-text" aria-hidden="true"></i>
                 <div class="ai-visual-node-text">
                   <span>עיבוד מסמכים</span>
                   <div class="ai-node-bar"><div class="ai-node-bar-fill w80"></div></div>
                 </div>
               </div>
               <div class="ai-visual-node">
-                <i class="ph ph-brain"></i>
+                <i class="ph ph-brain" aria-hidden="true"></i>
                 <div class="ai-visual-node-text">
                   <span>ניתוח רפואי</span>
                   <div class="ai-node-bar"><div class="ai-node-bar-fill w60"></div></div>
                 </div>
               </div>
               <div class="ai-visual-node">
-                <i class="ph ph-chart-line-up"></i>
+                <i class="ph ph-chart-line-up" aria-hidden="true"></i>
                 <div class="ai-visual-node-text">
                   <span>יצירת תובנות</span>
                   <div class="ai-node-bar"><div class="ai-node-bar-fill w45"></div></div>
@@ -2357,11 +2367,10 @@
                 <textarea
                   id="fmsg"
                   name="message"
-                  class="form-control"
+                  class="form-control form-textarea"
                   rows="4"
                   placeholder="ספרו לנו על התיק או הבקשה שלכם..."
                   aria-label="הודעה נוספת"
-                  style="resize: vertical;"
                 ></textarea>
               </div>
 
@@ -2373,7 +2382,7 @@
               </div>
 
               <div class="form-success" id="form-success" role="status" aria-live="polite">
-                <i class="ph ph-check-circle" aria-hidden="true" style="font-size:24px; margin-left:8px; vertical-align:middle;"></i>
+                <i class="ph ph-check-circle form-success-icon" aria-hidden="true"></i>
                 תודה! קיבלנו את פנייתכם ונחזור אליכם בהקדם.
               </div>
 
