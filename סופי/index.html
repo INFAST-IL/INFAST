@@ -1,0 +1,2600 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="INFAST - שירות מקצועי לאיסוף רשומות רפואיות, תיקי משטרה ומסמכים מהמוסד לביטוח לאומי למשרדי עורכי דין וחברות ביטוח." />
+  <title>INFAST | Legal Records Retrieval & Analysis</title>
+
+  <!-- Google Fonts: Heebo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&family=Lora:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+
+  <style>
+    /* ==================== SKIP LINK ==================== */
+    .skip-link {
+      position: absolute;
+      top: -200%;
+      right: 0;
+      background: var(--navy);
+      color: #fff;
+      padding: 12px 24px;
+      z-index: 9999;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      border-radius: 0 0 8px 0;
+      transition: top 0.2s;
+    }
+    .skip-link:focus {
+      top: 0;
+      outline: 3px solid var(--green-vivid);
+      outline-offset: 2px;
+    }
+
+    /* ==================== RESET & BASE ==================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #1A2649;
+      --navy-light: #253668;
+      --navy-dark: #0f1728;
+      --green: #3B7A52;
+      --green-light: #4d9068;
+      --green-dark: #2a5c3c;
+      --green-vivid: #2ECC71;
+      --bg: #F6F8FC;
+      --bg-card: #FFFFFF;
+      --text: #141828;
+      --text-muted: #556070;
+      --border: #dde4ef;
+      --shadow-sm: 0 2px 8px rgba(26,38,73,0.08);
+      --shadow-md: 0 8px 30px rgba(26,38,73,0.12);
+      --shadow-lg: 0 20px 60px rgba(26,38,73,0.18);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --display-font: 'Syne', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      direction: rtl;
+      text-align: right;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Subtle dot-grid texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(26,38,73,0.055) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-delay-1 { transition-delay: 0.08s; }
+    .fade-in-delay-2 { transition-delay: 0.18s; }
+    .fade-in-delay-3 { transition-delay: 0.28s; }
+    .fade-in-delay-4 { transition-delay: 0.38s; }
+
+    /* Hero entrance — scale from slightly small */
+    .hero-content .fade-in {
+      transform: translateY(24px) scale(0.975);
+    }
+    .hero-content .fade-in.visible {
+      transform: translateY(0) scale(1);
+    }
+    .hero-visual .fade-in {
+      transform: translateY(36px) scale(0.97);
+    }
+    .hero-visual .fade-in.visible {
+      transform: translateY(0) scale(1);
+    }
+
+    /* ==================== BUTTONS ==================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: var(--radius-sm);
+      font-family: 'Heebo', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--green);
+      outline-offset: 3px;
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+
+    .btn-primary:hover {
+      background: var(--navy-light);
+      border-color: var(--navy-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(31,45,90,0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--navy);
+      border-color: var(--navy);
+    }
+
+    .btn-outline:hover {
+      background: var(--navy);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .btn-green:hover {
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(74,124,89,0.3);
+    }
+
+    /* ==================== SECTION LABELS ==================== */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 5px 0 5px 0;
+      border-right: 3px solid var(--green);
+      padding-right: 12px;
+      border-radius: 0;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .section-label .ph {
+      font-size: 15px;
+      color: var(--green);
+    }
+
+    .section-label.light {
+      color: rgba(255,255,255,0.85);
+      border-right-color: var(--green-vivid);
+    }
+
+    .section-label.light .ph {
+      color: var(--green-vivid);
+    }
+
+    .section-title {
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title.white {
+      color: #fff;
+    }
+
+    .section-subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.8;
+      font-weight: 400;
+    }
+
+    .section-subtitle.white {
+      color: rgba(255,255,255,0.72);
+    }
+
+    /* ==================== HEADER ==================== */
+    #header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow var(--transition);
+    }
+
+    #header.scrolled {
+      box-shadow: var(--shadow-md);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      gap: 20px;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .logo-icon-img {
+      height: 42px;
+      width: auto;
+      display: block;
+      flex-shrink: 0;
+      mix-blend-mode: multiply;
+    }
+
+    .logo-divider {
+      width: 1px;
+      height: 30px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .logo-name {
+      font-family: 'Heebo', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 0.06em;
+      line-height: 1;
+    }
+
+    .logo-tagline {
+      font-family: 'Heebo', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--green);
+      letter-spacing: 0.12em;
+      line-height: 1;
+    }
+
+    .header-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-phone {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      transition: color var(--transition);
+    }
+
+    .header-phone:hover {
+      color: var(--green);
+    }
+
+    .header-phone .ph {
+      color: var(--green);
+      font-size: 18px;
+    }
+
+    /* ==================== HERO ==================== */
+    #hero {
+      background-color: #f4f7fd;
+      background-image:
+        radial-gradient(ellipse 70% 60% at 10% 55%, rgba(26,38,73,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 90% 20%, rgba(59,122,82,0.09) 0%, transparent 55%),
+        radial-gradient(circle, rgba(26,38,73,0.07) 1px, transparent 1px);
+      background-size: auto, auto, 28px 28px;
+      padding: 90px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle diagonal ruled line accent */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 48px,
+        rgba(26,38,73,0.025) 48px,
+        rgba(26,38,73,0.025) 49px
+      );
+      pointer-events: none;
+    }
+
+    /* Decorative geometric corner accent */
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 320px;
+      height: 320px;
+      background:
+        radial-gradient(circle at 0% 100%, rgba(59,122,82,0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(26,38,73,0.055);
+      border: 1px solid rgba(26,38,73,0.14);
+      border-radius: 6px;
+      padding: 7px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 28px;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-badge .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.3); }
+    }
+
+    .hero-h1 {
+      font-size: clamp(30px, 4.8vw, 54px);
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-h1 span {
+      color: var(--green);
+      position: relative;
+      display: inline;
+    }
+
+    .hero-h1 span::after {
+      content: '';
+      position: absolute;
+      bottom: 1px;
+      right: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(to left, var(--green-vivid), var(--green), transparent);
+      border-radius: 2px;
+      opacity: 0.7;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--text-muted);
+      line-height: 1.85;
+      margin-bottom: 36px;
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .trust-chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 2px 6px rgba(26,38,73,0.06);
+      backdrop-filter: blur(4px);
+    }
+
+    .chip .ph {
+      color: var(--green);
+      font-size: 15px;
+    }
+
+    /* Hero Visual */
+    .hero-visual {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-card-stack {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: transform var(--transition), box-shadow var(--transition);
+      border: 1px solid rgba(26,38,73,0.08);
+    }
+
+    .stat-card:hover {
+      transform: translateX(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.navy { background: rgba(31,45,90,0.08); color: var(--navy); }
+    .stat-icon.green { background: rgba(74,124,89,0.1); color: var(--green); }
+    .stat-icon.mixed { background: linear-gradient(135deg, rgba(31,45,90,0.08), rgba(74,124,89,0.08)); color: var(--navy); }
+
+    .stat-info .stat-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .stat-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ==================== SERVICES ==================== */
+    #services {
+      background: #fff;
+      padding: 90px 0;
+      position: relative;
+    }
+
+    #services::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 15%;
+      left: 15%;
+      height: 2px;
+      background: linear-gradient(to left, transparent, var(--green), var(--navy), transparent);
+      opacity: 0.35;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .service-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--navy);
+      transform: scaleY(0);
+      transition: transform var(--transition);
+      transform-origin: bottom;
+    }
+
+    .service-card:hover {
+      border-color: transparent;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-6px);
+      background: #fff;
+    }
+
+    .service-card:hover::before {
+      transform: scaleY(1);
+    }
+
+    .service-card.ai-card {
+      grid-column: span 2;
+      background: linear-gradient(135deg, #1F2D5A 0%, #0d1a3a 60%, #0a1628 100%);
+      border-color: rgba(74,124,89,0.3);
+      color: #fff;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .service-card.ai-card::before {
+      background: var(--green);
+      transform: scaleY(1);
+    }
+
+    /* Decorative glow */
+    .service-card.ai-card::after {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(74,124,89,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .service-card.ai-card:hover {
+      border-color: rgba(74,124,89,0.6);
+      box-shadow: 0 20px 60px rgba(13,26,58,0.5), 0 0 40px rgba(74,124,89,0.15);
+    }
+
+    .ai-card-left { position: relative; z-index: 1; }
+    .ai-card-right { position: relative; z-index: 1; }
+
+    .ai-coming-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(59,122,82,0.2);
+      border: 1px solid rgba(59,122,82,0.5);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-family: var(--display-font);
+      font-size: 11px;
+      font-weight: 700;
+      color: #72d499;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .ai-coming-badge .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background: #6ec895;
+      border-radius: 50%;
+      animation: pulse-dot 1.5s infinite;
+    }
+
+    .service-card.ai-card .ai-card-left h3 {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .service-card.ai-card .ai-card-left p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    .ai-features-list {
+      list-style: none;
+      margin-bottom: 28px;
+    }
+
+    .ai-features-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.82);
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .ai-features-list li:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .ai-features-list li .lock-icon {
+      color: #6ec895;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .ai-card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 12px 24px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .ai-card-cta:hover {
+      background: var(--green-light);
+      transform: translateY(-2px);
+    }
+
+    .ai-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      opacity: 0.9;
+    }
+
+    .ai-visual-node {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-visual-node::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(74,124,89,0.08) 50%, transparent 100%);
+      animation: scan-line 3s infinite linear;
+    }
+
+    @keyframes scan-line {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .ai-visual-node .ph {
+      font-size: 20px;
+      color: rgba(110,200,149,0.8);
+      flex-shrink: 0;
+    }
+
+    .ai-visual-node-text span {
+      display: block;
+      font-size: 12px;
+      color: rgba(255,255,255,0.78);
+      margin-bottom: 4px;
+    }
+
+    .ai-node-bar {
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      width: 120px;
+    }
+
+    .ai-node-bar-fill {
+      height: 100%;
+      background: linear-gradient(to left, #6ec895, #4A7C59);
+      border-radius: 2px;
+      animation: bar-grow 2s ease-out forwards;
+    }
+
+    @keyframes bar-grow {
+      from { width: 0; }
+    }
+
+    .ai-node-bar-fill.w60 { width: 60%; }
+    .ai-node-bar-fill.w80 { width: 80%; }
+    .ai-node-bar-fill.w45 { width: 45%; }
+
+    @media (max-width: 900px) {
+      .service-card.ai-card {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    .service-icon-wrap {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(31,45,90,0.08), rgba(74,124,89,0.08));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    .service-card h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+
+    .service-card p {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    .service-list {
+      list-style: none;
+    }
+
+    .service-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .service-list li .ph {
+      color: var(--green);
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ==================== WHY US ==================== */
+    #why-us {
+      background: var(--navy);
+      padding: 90px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #why-us::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(59,122,82,0.18) 0%, transparent 58%),
+        radial-gradient(ellipse at 85% 15%, rgba(255,255,255,0.05) 0%, transparent 45%),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 30px,
+          rgba(255,255,255,0.018) 30px,
+          rgba(255,255,255,0.018) 31px
+        );
+      pointer-events: none;
+    }
+
+    .why-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .why-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .why-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .security-banner {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius);
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 48px;
+      backdrop-filter: blur(4px);
+    }
+
+    .security-banner .ph {
+      font-size: 28px;
+      color: var(--green-light);
+      flex-shrink: 0;
+    }
+
+    .security-banner p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.85);
+      font-weight: 500;
+    }
+
+    .security-banner p strong {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .why-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      transition: background var(--transition);
+    }
+
+    .why-card:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .why-num {
+      width: 44px;
+      height: 44px;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 22px;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--green-vivid);
+      flex-shrink: 0;
+    }
+
+    .why-text h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .why-text p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.7;
+    }
+
+    /* ==================== PROCESS ==================== */
+    #process {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, rgba(26,38,73,0.055) 1px, transparent 1px);
+      background-size: 28px 28px;
+      padding: 90px 0;
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+      margin-top: 56px;
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 38px;
+      right: 16.5%;
+      left: 16.5%;
+      height: 2px;
+      background: linear-gradient(to left, var(--green-vivid), var(--green), var(--navy));
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    .step {
+      text-align: center;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Large ghost number decoration */
+    .step::before {
+      content: attr(data-num);
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--display-font);
+      font-size: 130px;
+      font-weight: 800;
+      color: rgba(26,38,73,0.045);
+      line-height: 1;
+      pointer-events: none;
+      z-index: 0;
+      letter-spacing: -0.04em;
+      user-select: none;
+    }
+
+    .step-num {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: #fff;
+      font-size: 26px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      border: 4px solid var(--bg);
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      position: relative;
+      z-index: 2;
+    }
+
+    .step:hover .step-num {
+      background: var(--green);
+      transform: scale(1.08);
+    }
+
+    .step h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ==================== CONTACT ==================== */
+    #contact {
+      background: #fff;
+      padding: 90px 0;
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    /* Form Side */
+    .contact-form-wrap h3 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 7px;
+    }
+
+    .form-group label .req {
+      color: var(--green);
+      margin-right: 2px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Heebo', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      direction: rtl;
+      outline: 2px solid transparent; /* replaced by box-shadow on :focus */
+      appearance: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(31,45,90,0.1);
+      background: #fff;
+    }
+
+    .form-control.invalid {
+      border-color: #e74c3c;
+    }
+
+    .form-control::placeholder {
+      color: #aab0c0;
+    }
+
+    select.form-control {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a6380' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 14px center;
+      padding-left: 40px;
+      cursor: pointer;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .error-msg {
+      font-size: 12px;
+      color: #e74c3c;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .form-group.has-error .error-msg {
+      display: block;
+    }
+
+    .form-group.has-error .form-control {
+      border-color: #e74c3c;
+    }
+
+    .form-submit-row {
+      margin-top: 24px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      justify-content: center;
+      padding: 15px;
+      font-size: 16px;
+    }
+
+    .form-success {
+      display: none;
+      background: rgba(74,124,89,0.1);
+      border: 1px solid var(--green);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      color: var(--green-dark);
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 16px;
+    }
+
+    /* Info Side */
+    .contact-info-wrap {
+      position: sticky;
+      top: 100px;
+    }
+
+    .contact-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      margin-bottom: 20px;
+    }
+
+    .contact-card h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contact-card h3 .ph {
+      color: var(--green);
+      font-size: 22px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .contact-detail:last-child {
+      border-bottom: none;
+    }
+
+    .contact-detail:hover {
+      padding-right: 6px;
+    }
+
+    .contact-detail-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-icon.navy { background: rgba(31,45,90,0.08); color: var(--navy); }
+    .contact-detail-icon.green { background: rgba(74,124,89,0.1); color: var(--green); }
+
+    .contact-detail-text span {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .contact-detail-text a,
+    .contact-detail-text strong {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      transition: color var(--transition);
+    }
+
+    .contact-detail-text a:hover {
+      color: var(--green);
+    }
+
+    .whatsapp-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 15px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .whatsapp-btn:hover {
+      background: #1da951;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(37,211,102,0.35);
+    }
+
+    .whatsapp-btn .ph {
+      font-size: 22px;
+    }
+
+    /* ==================== FOOTER ==================== */
+    #footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo .logo-name {
+      font-size: 20px;
+    }
+
+    .footer-logo-icon {
+      flex-shrink: 0;
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-accessibility-link {
+      color: var(--text-muted);
+      text-decoration: underline;
+    }
+
+    .footer-accessibility-link:hover,
+    .footer-accessibility-link:focus {
+      color: var(--navy);
+    }
+
+    /* ==================== ACCESSIBILITY STATEMENT ==================== */
+    .accessibility-section {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+    }
+
+    .accessibility-section h2 {
+      font-family: var(--display-font);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+
+    .accessibility-section p {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 12px;
+      max-width: 760px;
+    }
+
+    .accessibility-section ul {
+      list-style: disc;
+      padding-right: 24px;
+      margin-bottom: 16px;
+    }
+
+    .accessibility-section ul li {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    .accessibility-section a {
+      color: var(--green);
+      text-decoration: underline;
+    }
+
+    .accessibility-section code {
+      background: rgba(26,38,73,0.07);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .accessibility-section h3 {
+      font-family: var(--display-font);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+
+    .access-updated {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 24px;
+    }
+
+    .footer-contact {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-contact a {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color var(--transition);
+    }
+
+    .footer-contact a:hover {
+      color: var(--green);
+    }
+
+    .footer-contact a .ph {
+      font-size: 15px;
+    }
+
+
+    /* ==================== INFO PROVIDERS ==================== */
+    #providers {
+      background: var(--bg);
+      padding: 90px 0;
+    }
+
+    .providers-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 36px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      margin-bottom: -2px;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--navy);
+    }
+
+    .tab-btn.active {
+      color: var(--navy);
+      border-bottom-color: var(--green);
+    }
+
+    .tab-btn:focus-visible {
+      outline: 3px solid var(--green);
+      outline-offset: 2px;
+    }
+
+    .tab-btn .ph {
+      font-size: 18px;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .providers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .provider-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 20px;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .provider-card:hover {
+      border-color: var(--navy);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .provider-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .provider-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, rgba(31,45,90,0.08), rgba(74,124,89,0.06));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--navy);
+      flex-shrink: 0;
+    }
+
+    .provider-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .provider-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 900px) {
+      .hero-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      .why-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .process-steps {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .process-steps::before {
+        display: none;
+      }
+
+      .contact-info-wrap {
+        position: static;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: right;
+      }
+
+      .providers-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .providers-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        height: 64px;
+      }
+
+      .logo-icon-img {
+        height: 32px;
+      }
+
+      .logo-divider {
+        display: none;
+      }
+
+      .logo-name {
+        font-size: 18px;
+      }
+
+      .logo-tagline {
+        font-size: 11px;
+      }
+
+      /* On mobile: hide phone number text, show only icon */
+      .header-phone span {
+        display: none;
+      }
+
+      .header-phone {
+        min-width: 36px;
+        min-height: 36px;
+        background: rgba(31,45,90,0.06);
+        border-radius: 50%;
+        justify-content: center;
+        padding: 0;
+      }
+
+      .header-phone .ph {
+        font-size: 20px;
+      }
+
+      .header-cta .btn {
+        padding: 10px 18px;
+        font-size: 14px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .hero-actions .btn {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .service-card.ai-card {
+        grid-column: span 1;
+      }
+
+      .hero-sub {
+        font-size: 15px;
+      }
+
+      .section-subtitle {
+        font-size: 15px;
+      }
+
+      .security-banner {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 16px 20px;
+      }
+
+      .form-grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      #hero { padding: 60px 0; }
+      #services, #why-us, #process, #contact, #providers { padding: 60px 0; }
+
+      .section-header {
+        margin-bottom: 36px;
+      }
+
+      .why-header {
+        margin-bottom: 36px;
+      }
+
+      .service-card {
+        padding: 24px 20px;
+      }
+
+      .tab-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .hero-h1 {
+        font-size: 26px;
+      }
+
+      .header-cta {
+        gap: 8px;
+      }
+
+      .container {
+        padding: 0 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">דלג לתוכן הראשי</a>
+
+  <!-- ==================== HEADER ==================== -->
+  <header id="header" role="banner">
+    <div class="container">
+      <div class="header-inner">
+
+        <div class="logo-wrap">
+          <img src="Logo.jpg" alt="" class="logo-icon-img" aria-hidden="true" />
+          <div class="logo-divider" aria-hidden="true"></div>
+          <div class="logo-text">
+            <span class="logo-name">INFAST</span>
+            <span class="logo-tagline">Legal Records Retrieval &amp; Analysis</span>
+          </div>
+        </div>
+
+        <div class="header-cta">
+          <a href="tel:0546326376" class="header-phone" aria-label="התקשרו אלינו: 054-6326376">
+            <i class="ph ph-phone-call" aria-hidden="true"></i>
+            <span>054-6326376</span>
+          </a>
+          <a href="#contact" class="btn btn-primary" aria-label="צרו קשר עם INFAST">
+            צרו קשר
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ==================== HERO ==================== -->
+    <section id="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-inner">
+
+          <div class="hero-content">
+            <div class="hero-badge fade-in">
+              <div class="dot"></div>
+              שירות מקצועי לעורכי דין וחברות ביטוח
+            </div>
+            <h1 class="hero-h1 fade-in fade-in-delay-1" id="hero-title">
+              איסוף רשומות רפואיות,<br/>
+              תיקי משטרה ומסמכים<br/>
+              <span>מהמוסד לביטוח לאומי.</span>
+            </h1>
+            <p class="hero-sub fade-in fade-in-delay-2">
+              אנו משחררים את משרדך מהנטל הבירוקרטי. שירות מקיף לאיתור ואיסוף מידע —
+              הכל במקום אחד, במהירות שיא, בדיוק מקצועי.
+            </p>
+            <div class="hero-actions fade-in fade-in-delay-3">
+              <a href="#contact" class="btn btn-primary" aria-label="השאירו פרטים לקבלת מידע">
+                <i class="ph ph-paper-plane-tilt" aria-hidden="true"></i>
+                השאירו פרטים
+              </a>
+              <a href="mailto:office@infast.co.il?subject=בקשת מחירון" class="btn btn-outline" aria-label="פנו אלינו לקבלת מחירון">
+                <i class="ph ph-file-text" aria-hidden="true"></i>
+                לקבלת מחירון
+              </a>
+            </div>
+            <div class="trust-chips fade-in fade-in-delay-4">
+              <div class="chip"><i class="ph ph-lightning" aria-hidden="true"></i> מהירות שיא</div>
+              <div class="chip"><i class="ph ph-scales" aria-hidden="true"></i> דיוק משפטי</div>
+              <div class="chip"><i class="ph ph-shield-check" aria-hidden="true"></i> אבטחת מידע קפדנית</div>
+            </div>
+          </div>
+
+          <!-- Visual Cards -->
+          <div class="hero-visual" aria-hidden="true">
+            <div class="hero-card-stack">
+              <div class="stat-card fade-in fade-in-delay-1">
+                <div class="stat-icon navy">
+                  <i class="ph ph-hospital" aria-hidden="true"></i>
+                </div>
+                <div class="stat-info">
+                  <p class="stat-title">רשומות רפואיות</p>
+                  <p>קופות חולים, בתי חולים, מרפאות פרטיות</p>
+                </div>
+              </div>
+              <div class="stat-card fade-in fade-in-delay-2">
+                <div class="stat-icon green">
+                  <i class="ph ph-buildings" aria-hidden="true"></i>
+                </div>
+                <div class="stat-info">
+                  <p class="stat-title">מוסד לביטוח לאומי</p>
+                  <p>תיקי נפגעי עבודה, נכות, קצבאות וכיו"ב</p>
+                </div>
+              </div>
+              <div class="stat-card fade-in fade-in-delay-3">
+                <div class="stat-icon mixed">
+                  <i class="ph ph-police-car" aria-hidden="true"></i>
+                </div>
+                <div class="stat-info">
+                  <p class="stat-title">תיקי משטרה</p>
+                  <p>תאונות דרכים, פלילים, ממצאי חקירה</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SERVICES ==================== -->
+    <section id="services" aria-labelledby="services-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-label">
+            <i class="ph ph-briefcase" aria-hidden="true"></i>
+            השירותים שלנו
+          </div>
+          <h2 class="section-title" id="services-title">מה אנחנו עושים</h2>
+          <p class="section-subtitle">
+            מטפלים בכל תהליך האיסוף מתחילתו ועד סופו — כך שתוכלו להתרכז במה שחשוב: הלקוח שלכם.
+          </p>
+        </div>
+
+        <div class="services-grid">
+
+          <div class="service-card fade-in fade-in-delay-1">
+            <div class="service-icon-wrap">
+              <i class="ph ph-heartbeat" aria-hidden="true"></i>
+            </div>
+            <h3>רשומות רפואיות</h3>
+            <p>איסוף מקיף של תיעוד רפואי ממגוון גורמים — מהרופא המשפחה ועד המומחים, ומרפאות ציבוריות עד פרטיות.</p>
+            <ul class="service-list" aria-label="פרטי השירות">
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> קופות חולים כל הסניפים</li>
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> בתי חולים ציבוריים ופרטיים</li>
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> רופאים מומחים ומרפאות פרטיות</li>
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> מרפאות ציבוריות ופרטיות</li>
+            </ul>
+          </div>
+
+          <div class="service-card fade-in fade-in-delay-2">
+            <div class="service-icon-wrap">
+              <i class="ph ph-buildings" aria-hidden="true"></i>
+            </div>
+            <h3>מוסד לביטוח לאומי</h3>
+            <p>איסוף תיעוד ומסמכים מהמוסד לביטוח לאומי — נתמך בפניות, מעקב ורישום מסודר עד לקבלת החומר המלא.</p>
+            <ul class="service-list" aria-label="פרטי השירות">
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> תיקי נפגעי עבודה</li>
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> תיקי נכות ואי-כושר</li>
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> קצבאות ותשלומים</li>
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> פניות וטיפול מול הסניפים</li>
+            </ul>
+          </div>
+
+          <div class="service-card fade-in fade-in-delay-3">
+            <div class="service-icon-wrap">
+              <i class="ph ph-file-search" aria-hidden="true"></i>
+            </div>
+            <h3>תיקי משטרה</h3>
+            <p>השגת חומרי חקירה ותיקי תאונות בצורה מקצועית ומהירה, כולל כל המסמכים הנדרשים להליך המשפטי.</p>
+            <ul class="service-list" aria-label="פרטי השירות">
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> תאונות דרכים (עדויות, רישוי, רפואה)</li>
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> תיקים פליליים וממצאי חקירה</li>
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> פרוטוקולי חקירה ודוחות</li>
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i> מסמכים נלווים לתיקים</li>
+            </ul>
+          </div>
+
+          <div class="service-card ai-card fade-in fade-in-delay-4">
+            <div class="ai-card-left">
+              <div class="ai-coming-badge">
+                <div class="pulse-dot"></div>
+                ✦ COMING SOON
+              </div>
+              <h3>בינה מלאכותית בשירות המשפט</h3>
+              <p>טכנולוגיה שתשנה את האופן שבו משרדי עורכי דין עובדים עם חומר רפואי — מעשרות עמודים לתובנה אחת ברורה.</p>
+              <ul class="ai-features-list" aria-label="פיצ'רים בפיתוח">
+                <li>
+                  <i class="ph ph-lock-simple ph lock-icon" aria-hidden="true"></i>
+                  סיכום אוטומטי של עשרות עמודים לדף אחד
+                </li>
+                <li>
+                  <i class="ph ph-lock-simple lock-icon" aria-hidden="true"></i>
+                  זיהוי אירועים רפואיים מפתח מתוך הכאוס
+                </li>
+                <li>
+                  <i class="ph ph-lock-simple lock-icon" aria-hidden="true"></i>
+                  דוחות מותאמים לפרופיל כל מומחה
+                </li>
+              </ul>
+              <a href="#contact" class="ai-card-cta" aria-label="השאירו פרטים לקבלת עדכון על שירות ה-AI">
+                <i class="ph ph-bell" aria-hidden="true"></i>
+                רוצים להיות ראשונים לדעת?
+              </a>
+            </div>
+            <div class="ai-card-right ai-visual" aria-hidden="true">
+              <div class="ai-visual-node">
+                <i class="ph ph-file-text"></i>
+                <div class="ai-visual-node-text">
+                  <span>עיבוד מסמכים</span>
+                  <div class="ai-node-bar"><div class="ai-node-bar-fill w80"></div></div>
+                </div>
+              </div>
+              <div class="ai-visual-node">
+                <i class="ph ph-brain"></i>
+                <div class="ai-visual-node-text">
+                  <span>ניתוח רפואי</span>
+                  <div class="ai-node-bar"><div class="ai-node-bar-fill w60"></div></div>
+                </div>
+              </div>
+              <div class="ai-visual-node">
+                <i class="ph ph-chart-line-up"></i>
+                <div class="ai-visual-node-text">
+                  <span>יצירת תובנות</span>
+                  <div class="ai-node-bar"><div class="ai-node-bar-fill w45"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== INFO PROVIDERS ==================== -->
+    <section id="providers" aria-labelledby="providers-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-label">
+            <i class="ph ph-database" aria-hidden="true"></i>
+            ספקי המידע
+          </div>
+          <h2 class="section-title" id="providers-title">ספקי המידע שלנו</h2>
+          <p class="section-subtitle">
+            גישה מקצועית לכל מקור מידע רלוונטי — ממשלתי, רפואי ומשפטי. מעל 14 ספקים שונים.
+          </p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="providers-tabs" role="tablist" aria-label="קבוצות ספקי מידע">
+          <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-medical" id="btn-medical">
+            <i class="ph ph-first-aid-kit" aria-hidden="true"></i>
+            רפואי
+          </button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-gov" id="btn-gov">
+            <i class="ph ph-buildings" aria-hidden="true"></i>
+            ממשלתי ורשמי
+          </button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-traffic" id="btn-traffic">
+            <i class="ph ph-traffic-sign" aria-hidden="true"></i>
+            תחבורה ובטיחות
+          </button>
+        </div>
+
+        <!-- Tab: רפואי -->
+        <div id="tab-medical" class="tab-panel active" role="tabpanel" aria-labelledby="btn-medical">
+          <div class="providers-grid">
+            <div class="provider-card fade-in fade-in-delay-1">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-heart" aria-hidden="true"></i></div>
+                <h3>קופות חולים</h3>
+              </div>
+              <p>כללית, מכבי, לאומית ומאוחדת — איתור כל המסמכים, רופא משפחה, מומחים, מידע ארכיוני ומעקב בין קופות.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-2">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-hospital" aria-hidden="true"></i></div>
+                <h3>בתי חולים</h3>
+              </div>
+              <p>רשומות אשפוז, מרפאות חוץ, פסיכיאטריה, צילומי רנטגן והדמיות — מכל בתי החולים בישראל.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-3">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-stethoscope" aria-hidden="true"></i></div>
+                <h3>רופאים ומרפאות פרטיות</h3>
+              </div>
+              <p>תיאום ישיר מול רופאים מומחים ומרפאות פרטיות לקבלת תיעוד רפואי מקיף.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-1">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-ambulance" aria-hidden="true"></i></div>
+                <h3>מד"א וחברות אמבולנסים</h3>
+              </div>
+              <p>דוחות פינוי, טיפול ראשוני בשטח, תיעוד פציעה ראשוני מרגע האירוע.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-2">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-brain" aria-hidden="true"></i></div>
+                <h3>מרכזים פסיכיאטריים</h3>
+              </div>
+              <p>השגת מסמכים ממוסדות בריאות הנפש תוך שמירה קפדנית על פרטיות וסודיות רפואית.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-3">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-tooth" aria-hidden="true"></i></div>
+                <h3>רופאי שיניים</h3>
+              </div>
+              <p>רשומות שיניים מקופות חולים, מרפאות פרטיות ומוסדות פה-לסת, כולל הדמיות וצילומי פנורמה.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: ממשלתי ורשמי -->
+        <div id="tab-gov" class="tab-panel" role="tabpanel" aria-labelledby="btn-gov">
+          <div class="providers-grid">
+            <div class="provider-card fade-in fade-in-delay-1">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-buildings" aria-hidden="true"></i></div>
+                <h3>מוסד לביטוח לאומי</h3>
+              </div>
+              <p>נכות כללית, נפגעי עבודה, קצבת הכנסה, אבטלה, שאירים, שיקום וסיעוד — מהפנייה הראשונה ועד סגירת תיק.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-2">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-first-aid-kit" aria-hidden="true"></i></div>
+                <h3>משרד ולשכת הבריאות</h3>
+              </div>
+              <p>רשומות מלידה עד גיל 25, טיפת חלב, מחלות כרוניות, אישורי טיפול לגן ולבית ספר.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-3">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-shield-star" aria-hidden="true"></i></div>
+                <h3>צה"ל ומשרד הביטחון</h3>
+              </div>
+              <p>לשכות גיוס, פקוד הרפואה, תיקים רפואיים של חיילים ושוחררים. הסכם מיוחד עם ארגון נכי צה"ל.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-1">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-briefcase" aria-hidden="true"></i></div>
+                <h3>משרדים ממשלתיים</h3>
+              </div>
+              <p>משרד החינוך, העבודה, הרווחה והדת — תיקי עובדים, תאונות עבודה, רישומים ואישורים.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-2">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-scales" aria-hidden="true"></i></div>
+                <h3>בתי משפט</h3>
+              </div>
+              <p>כל הערכאות — שלום, מחוזי, עליון, משפחה, עבודה וטריבונלים מיוחדים. פסיקות, פרוטוקולים ותיקים.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-3">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-lock-key" aria-hidden="true"></i></div>
+                <h3>שירות בתי הסוהר</h3>
+              </div>
+              <p>תיקי בריאות של עצורים ושוהים — עבר ונוכח, עם כל האישורים הנדרשים.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: תחבורה ובטיחות -->
+        <div id="tab-traffic" class="tab-panel" role="tabpanel" aria-labelledby="btn-traffic">
+          <div class="providers-grid">
+            <div class="provider-card fade-in fade-in-delay-1">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-police-car" aria-hidden="true"></i></div>
+                <h3>משטרה — תנועה</h3>
+              </div>
+              <p>דוחות תאונות דרכים, עדויות נהגים, מסמכים רפואיים, כתבי אישום, ממצאי חקירה תעבורתית.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-2">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-file-search" aria-hidden="true"></i></div>
+                <h3>משטרה — רישום פלילי</h3>
+              </div>
+              <p>תיקי חקירה בעבירות חמורות: פריצות, הצתות, עבירות אלימות ואירועים פליליים.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-3">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-car" aria-hidden="true"></i></div>
+                <h3>משרד הרישוי</h3>
+              </div>
+              <p>סטטוס רישיון נהיגה, בדיקות רפואיות, ערעורים על שלילה, תיקי רישוי ובדיקות כושר נהיגה.</p>
+            </div>
+            <div class="provider-card fade-in fade-in-delay-4">
+              <div class="provider-card-head">
+                <div class="provider-icon"><i class="ph ph-shield-check" aria-hidden="true"></i></div>
+                <h3>המכון לבטיחות בדרכים</h3>
+              </div>
+              <p>חוות דעת בטיחות, בדיקות כלי רכב, נתוני תאונות ומסמכים רלוונטיים לתביעות.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== WHY US ==================== -->
+    <section id="why-us" aria-labelledby="why-title">
+      <div class="container">
+        <div class="why-inner">
+
+          <div class="why-header fade-in">
+            <div class="section-label light">
+              <i class="ph ph-star" aria-hidden="true"></i>
+              היתרון שלנו
+            </div>
+            <h2 class="section-title white" id="why-title">למה לבחור ב-INFAST?</h2>
+            <p class="section-subtitle white">
+              אנחנו לא עוד חברת שליחים. אנחנו שותף אסטרטגי שמבין את הצרכים הייחודיים של ההליך המשפטי.
+            </p>
+          </div>
+
+          <div class="security-banner fade-in">
+            <i class="ph ph-lock-key" aria-hidden="true"></i>
+            <p>
+              <strong>אבטחת מידע וסודיות מקצועית בסטנדרטים הגבוהים ביותר.</strong>
+              כל המסמכים מועברים בצינורות מאובטחים ובהתאם לחוקי הגנת הפרטיות.
+            </p>
+          </div>
+
+          <div class="why-grid">
+            <div class="why-card fade-in fade-in-delay-1">
+              <div class="why-num">1</div>
+              <div class="why-text">
+                <h3>שירות שווה לכל גודל משרד</h3>
+                <p>לא משנה אם אתם משרד חד-עורכי-דין או שותפות גדולה — מקבלים את אותה רמת מקצועיות ומהירות.</p>
+              </div>
+            </div>
+            <div class="why-card fade-in fade-in-delay-2">
+              <div class="why-num">2</div>
+              <div class="why-text">
+                <h3>ניהול דיגיטלי ושקיפות מלאה</h3>
+                <p>מערכת מעקב שמאפשרת לכם לדעת בכל רגע היכן עומד התיק — ללא טלפונים מיותרים.</p>
+              </div>
+            </div>
+            <div class="why-card fade-in fade-in-delay-3">
+              <div class="why-num">3</div>
+              <div class="why-text">
+                <h3>מחיר תחרותי + ערך מוסף AI</h3>
+                <p>תמחור שקוף ותחרותי, עם תוספת שירותי ניתוח AI שאין לה תחרות בשוק כיום.</p>
+              </div>
+            </div>
+            <div class="why-card fade-in fade-in-delay-4">
+              <div class="why-num">4</div>
+              <div class="why-text">
+                <h3>גמישות בתשלום ובהסדרי עבודה</h3>
+                <p>מאפשרים הסדרי תשלום מותאמים, כולל חיוב צד שלישי — בניגוד לשיטות הישנות בשוק.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PROCESS ==================== -->
+    <section id="process" aria-labelledby="process-title">
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="section-label">
+            <i class="ph ph-flow-arrow" aria-hidden="true"></i>
+            תהליך העבודה
+          </div>
+          <h2 class="section-title" id="process-title">איך זה עובד?</h2>
+          <p class="section-subtitle">
+            שלושה שלבים פשוטים — מהפנייה הראשונה ועד קבלת החומר המסודר.
+          </p>
+        </div>
+
+        <div class="process-steps" role="list">
+
+          <div class="step fade-in fade-in-delay-1" role="listitem" data-num="01">
+            <div class="step-num" aria-hidden="true">1</div>
+            <h3>פתיחת פנייה</h3>
+            <p>שולחים לנו את פרטי התיק והגורמים הרלוונטיים — בטלפון, מייל, או WhatsApp.</p>
+          </div>
+
+          <div class="step fade-in fade-in-delay-2" role="listitem" data-num="02">
+            <div class="step-num" aria-hidden="true">2</div>
+            <h3>איסוף מקצועי</h3>
+            <p>הצוות שלנו פועל מול הגורמים הרלוונטיים ועוקב אחר כל מסמך עד לקבלתו.</p>
+          </div>
+
+          <div class="step fade-in fade-in-delay-3" role="listitem" data-num="03">
+            <div class="step-num" aria-hidden="true">3</div>
+            <h3>קבלת חומר דיגיטלי</h3>
+            <p>מקבלים חבילת מסמכים ממוינת, ברורה ומוכנה לשימוש — בקובץ דיגיטלי נקי.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTACT ==================== -->
+    <section id="contact" aria-labelledby="contact-title">
+      <div class="container">
+
+        <div class="section-header fade-in">
+          <div class="section-label">
+            <i class="ph ph-chats" aria-hidden="true"></i>
+            יצירת קשר
+          </div>
+          <h2 class="section-title" id="contact-title">נשמח לשמוע מכם</h2>
+          <p class="section-subtitle">
+            השאירו פרטים ונחזור אליכם תוך זמן קצר, או פנו ישירות לשניר.
+          </p>
+        </div>
+
+        <div class="contact-inner">
+
+          <!-- Form -->
+          <div class="contact-form-wrap fade-in">
+            <h3>שלחו לנו פנייה</h3>
+            <form id="contact-form" novalidate aria-label="טופס יצירת קשר">
+
+              <div class="form-grid-2">
+                <div class="form-group" id="fg-name">
+                  <label for="fname">שם מלא <span class="req" aria-hidden="true">*</span></label>
+                  <input
+                    type="text"
+                    id="fname"
+                    name="name"
+                    class="form-control"
+                    placeholder="ישראל ישראלי"
+                    required
+                    autocomplete="name"
+                    aria-required="true"
+                    aria-describedby="fname-error"
+                  />
+                  <span class="error-msg" id="fname-error" role="alert">נא למלא שם מלא</span>
+                </div>
+
+                <div class="form-group" id="fg-firm">
+                  <label for="ffirm">שם המשרד / החברה</label>
+                  <input
+                    type="text"
+                    id="ffirm"
+                    name="firm"
+                    class="form-control"
+                    placeholder="משרד עו&quot;ד ישראלי ושות'"
+                    autocomplete="organization"
+                  />
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group" id="fg-phone">
+                  <label for="fphone">טלפון <span class="req" aria-hidden="true">*</span></label>
+                  <input
+                    type="tel"
+                    id="fphone"
+                    name="phone"
+                    class="form-control"
+                    placeholder="05X-XXXXXXX"
+                    required
+                    autocomplete="tel"
+                    aria-required="true"
+                    aria-describedby="fphone-error"
+                  />
+                  <span class="error-msg" id="fphone-error" role="alert">נא למלא מספר טלפון תקין</span>
+                </div>
+
+                <div class="form-group" id="fg-email">
+                  <label for="femail">אימייל</label>
+                  <input
+                    type="email"
+                    id="femail"
+                    name="email"
+                    class="form-control"
+                    placeholder="name@office.co.il"
+                    autocomplete="email"
+                    aria-describedby="femail-error"
+                  />
+                  <span class="error-msg" id="femail-error" role="alert">כתובת אימייל לא תקינה</span>
+                </div>
+              </div>
+
+              <div class="form-group" id="fg-type">
+                <label for="ftype">סוג הבקשה</label>
+                <select id="ftype" name="request_type" class="form-control" aria-label="בחרו סוג בקשה">
+                  <option value="" disabled selected>בחרו סוג בקשה...</option>
+                  <option value="medical">רשומות רפואיות</option>
+                  <option value="police">תיק משטרה</option>
+                  <option value="national-insurance">מוסד לביטוח לאומי</option>
+                  <option value="combined">שילוב של מספר שירותים</option>
+                  <option value="pricing">מחירון / הסדר עבודה</option>
+                  <option value="other">אחר</option>
+                </select>
+              </div>
+
+              <div class="form-group" id="fg-msg">
+                <label for="fmsg">פרטים נוספים</label>
+                <textarea
+                  id="fmsg"
+                  name="message"
+                  class="form-control"
+                  rows="4"
+                  placeholder="ספרו לנו על התיק או הבקשה שלכם..."
+                  aria-label="הודעה נוספת"
+                  style="resize: vertical;"
+                ></textarea>
+              </div>
+
+              <div class="form-submit-row">
+                <button type="submit" class="btn btn-primary btn-submit" aria-label="שלחו את הפנייה">
+                  <i class="ph ph-paper-plane-tilt" aria-hidden="true"></i>
+                  שלחו פנייה
+                </button>
+              </div>
+
+              <div class="form-success" id="form-success" role="status" aria-live="polite">
+                <i class="ph ph-check-circle" aria-hidden="true" style="font-size:24px; margin-left:8px; vertical-align:middle;"></i>
+                תודה! קיבלנו את פנייתכם ונחזור אליכם בהקדם.
+              </div>
+
+            </form>
+          </div>
+
+          <!-- Info -->
+          <div class="contact-info-wrap fade-in fade-in-delay-2">
+
+            <div class="contact-card">
+              <h3><i class="ph ph-address-book" aria-hidden="true"></i> פרטי יצירת קשר</h3>
+
+              <div class="contact-detail">
+                <div class="contact-detail-icon navy">
+                  <i class="ph ph-user" aria-hidden="true"></i>
+                </div>
+                <div class="contact-detail-text">
+                  <span>איש קשר</span>
+                  <strong>שניר דעבול</strong>
+                </div>
+              </div>
+
+              <div class="contact-detail">
+                <div class="contact-detail-icon green">
+                  <i class="ph ph-phone-call" aria-hidden="true"></i>
+                </div>
+                <div class="contact-detail-text">
+                  <span>טלפון</span>
+                  <a href="tel:0546326376" aria-label="התקשרו: 054-6326376">054-6326376</a>
+                </div>
+              </div>
+
+              <div class="contact-detail">
+                <div class="contact-detail-icon navy">
+                  <i class="ph ph-envelope" aria-hidden="true"></i>
+                </div>
+                <div class="contact-detail-text">
+                  <span>אימייל</span>
+                  <a href="mailto:office@infast.co.il" aria-label="שלחו מייל: office@infast.co.il">office@infast.co.il</a>
+                </div>
+              </div>
+
+            </div>
+
+            <a
+              href="https://wa.me/972546326376?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A7%D7%91%D7%9C%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A0%D7%95%D7%A1%D7%A4%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%A9%D7%99%D7%A8%D7%95%D7%AA%D7%99%20%D7%90%D7%99%D7%A1%D7%95%D7%A3%20%D7%94%D7%9E%D7%A1%D7%9E%D7%9B%D7%99%D7%9D"
+              class="whatsapp-btn"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="שלחו הודעת WhatsApp לשניר דעבול"
+            >
+              <!-- WhatsApp SVG Icon -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              שלחו הודעה ב-WhatsApp
+            </a>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== ACCESSIBILITY STATEMENT ==================== -->
+  <section id="accessibility-statement" aria-labelledby="access-title" class="accessibility-section">
+    <div class="container">
+
+      <h2 id="access-title">הצהרת נגישות</h2>
+
+      <p>חברת INFAST רואה חשיבות עליונה במתן שירות שוויוני לכלל המשתמשים, לרבות אנשים עם מוגבלויות. האתר תוכנן ופותח תוך מחויבות לנגישות דיגיטלית בהתאם לדרישות <strong>תקן ישראלי 5568</strong> ועקרונות <strong>WCAG 2.1 ברמה AA</strong>, וכן בהתאם להוראות חוק שוויון זכויות לאנשים עם מוגבלות, התשנ"ח–1998.</p>
+
+      <h3>מה בוצע באתר</h3>
+      <ul>
+        <li>מבנה סמנטי תקני — שימוש בתגיות <strong>header, main, section, footer</strong> וציוני דרך (landmarks) לניווט מהיר</li>
+        <li>היררכיית כותרות תקינה ורצופה (H1 ← H2 ← H3) ללא דילוג רמות</li>
+        <li>קישור "דלג לתוכן הראשי" בראש הדף לניווט מהיר עבור משתמשי מקלדת וקורא מסך</li>
+        <li>כל שדות הטופס מחוברים לתוויות (<strong>label</strong>) ולהודעות שגיאה בעזרת <strong>aria-describedby</strong></li>
+        <li>ניגודיות צבעים העומדת ביחס מינימלי של 4.5:1 לטקסט רגיל ו-3:1 לטקסט גדול ואייקונים</li>
+        <li>טקסט חלופי (alt) לכל תמונה משמעותית; תמונות דקורטיביות מסומנות <strong>alt=""</strong></li>
+        <li>ניווט מלא במקלדת בלבד, כולל מיקוד ויזואלי ברור על כל אלמנט אינטראקטיבי</li>
+        <li>שפת הדף מוגדרת כעברית (<strong>lang="he" dir="rtl"</strong>) לתמיכה בקוראי מסך</li>
+        <li>הודעות מערכת (הגשת טופס, שגיאות) מוכרזות אוטומטית לקוראי מסך באמצעות <strong>aria-live</strong></li>
+        <li>תפריט ה-tabs של ספקי המידע ממומש עם תפקידי ARIA מלאים (role="tablist/tab/tabpanel")</li>
+      </ul>
+
+      <h3>מצב התאימות</h3>
+      <p>רוב דפי האתר עומדים בעקרונות WCAG 2.1 AA. ייתכן שמסמכי PDF מצורפים או תכנים חיצוניים (כגון מפות) אינם עומדים בכל הדרישות. אנו פועלים לשיפור מתמיד.</p>
+
+      <h3>כיצד לשנות את גודל הגופן</h3>
+      <p>ניתן להגדיל את הטקסט בכל דפדפן מודרני: <strong>Ctrl / Cmd עם +</strong> להגדלה, <strong>Ctrl / Cmd עם −</strong> להקטנה, <strong>Ctrl / Cmd + 0</strong> לאיפוס.</p>
+
+      <h3>פניות בנושא נגישות</h3>
+      <p>נתקלתם בבעיה? יש לכם הצעה לשיפור? נשמח לשמוע.</p>
+      <p>
+        <strong>רכז הנגישות:</strong> INFAST<br />
+        <strong>טלפון:</strong> <a href="tel:0546326376">054-6326376</a><br />
+        <strong>דוא"ל:</strong> <a href="mailto:office@infast.co.il">office@infast.co.il</a>
+      </p>
+      <p class="access-updated">הצהרה זו עודכנה לאחרונה: מרץ 2026</p>
+
+    </div>
+  </section>
+
+  <footer id="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+
+        <div class="footer-logo">
+          <img src="Logo.jpg" alt="" class="logo-icon-img" aria-hidden="true" />
+          <div class="logo-divider" aria-hidden="true"></div>
+          <div class="logo-text">
+            <span class="logo-name">INFAST</span>
+            <span class="logo-tagline">Legal Records Retrieval &amp; Analysis</span>
+          </div>
+        </div>
+
+        <div class="footer-contact">
+          <a href="tel:0546326376" aria-label="טלפון: 054-6326376">
+            <i class="ph ph-phone" aria-hidden="true"></i>
+            054-6326376
+          </a>
+          <a href="mailto:office@infast.co.il" aria-label="מייל: office@infast.co.il">
+            <i class="ph ph-envelope" aria-hidden="true"></i>
+            office@infast.co.il
+          </a>
+        </div>
+
+        <p class="footer-copy">© 2025 INFAST. כל הזכויות שמורות. &nbsp;|&nbsp; <a href="#accessibility-statement" class="footer-accessibility-link">הצהרת נגישות</a></p>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JS ==================== -->
+  <script>
+    // Scroll animations (Intersection Observer)
+    (function () {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+    })();
+
+    // Header shadow on scroll
+    (function () {
+      const header = document.getElementById('header');
+      window.addEventListener('scroll', () => {
+        header.classList.toggle('scrolled', window.scrollY > 20);
+      }, { passive: true });
+    })();
+
+    // Providers tabs
+    (function () {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      tabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach((b) => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+          document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          const panel = document.getElementById(btn.getAttribute('aria-controls'));
+          if (panel) {
+            panel.classList.add('active');
+            // Re-trigger fade-in for newly visible items
+            panel.querySelectorAll('.fade-in').forEach((el) => {
+              el.classList.remove('visible');
+              setTimeout(() => el.classList.add('visible'), 50);
+            });
+          }
+        });
+      });
+    })();
+
+    // Form validation
+    (function () {
+      const form = document.getElementById('contact-form');
+      if (!form) return;
+
+      function validateField(id, fgId, condition) {
+        const el = document.getElementById(id);
+        const fg = document.getElementById(fgId);
+        if (!el || !fg) return true;
+        const valid = condition(el.value.trim());
+        fg.classList.toggle('has-error', !valid);
+        return valid;
+      }
+
+      function isValidPhone(v) {
+        return /^0[0-9]{1,2}[-. ]?[0-9]{7,8}$/.test(v.replace(/\s/g, ''));
+      }
+
+      function isValidEmail(v) {
+        return v === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const nameOk = validateField('fname', 'fg-name', (v) => v.length >= 2);
+        const phoneOk = validateField('fphone', 'fg-phone', isValidPhone);
+        const emailOk = validateField('femail', 'fg-email', isValidEmail);
+
+        if (!nameOk || !phoneOk || !emailOk) return;
+
+        const submitBtn = form.querySelector('[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'שולח...';
+
+        const data = {
+          name:         document.getElementById('fname').value.trim(),
+          firm:         document.getElementById('ffirm').value.trim(),
+          phone:        document.getElementById('fphone').value.trim(),
+          email:        document.getElementById('femail').value.trim(),
+          request_type: document.getElementById('ftype').value,
+          message:      document.getElementById('fmsg').value.trim(),
+          _subject:     'פנייה חדשה מהאתר – INFAST'
+        };
+
+        fetch('https://formspree.io/f/xjgaqlyd', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        })
+          .then(function (res) { return res.json(); })
+          .then(function (res) {
+            if (res.ok) {
+              form.querySelectorAll('input, select, textarea, button').forEach(function (el) {
+                el.disabled = true;
+              });
+              document.getElementById('form-success').style.display = 'block';
+            } else {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<i class="ph ph-paper-plane-tilt" aria-hidden="true"></i> שלחו פנייה';
+              alert('אירעה שגיאה. אנא נסו שוב או פנו אלינו ישירות.');
+            }
+          })
+          .catch(function () {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="ph ph-paper-plane-tilt" aria-hidden="true"></i> שלחו פנייה';
+            alert('אירעה שגיאה. אנא נסו שוב או פנו אלינו ישירות.');
+          });
+      });
+
+      // Live validation on blur
+      document.getElementById('fname').addEventListener('blur', () =>
+        validateField('fname', 'fg-name', (v) => v.length >= 2)
+      );
+      document.getElementById('fphone').addEventListener('blur', () =>
+        validateField('fphone', 'fg-phone', isValidPhone)
+      );
+      document.getElementById('femail').addEventListener('blur', () =>
+        validateField('femail', 'fg-email', isValidEmail)
+      );
+    })();
+  </script>
+
+</body>
+</html>
